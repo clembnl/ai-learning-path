@@ -209,7 +209,7 @@ The MLP's contribution here is that it learns a flexible representation from the
 
 ## Run the course yourself
 
-The companion repository is intended to be available at [clembnl/ai-learning-path](https://github.com/clembnl/ai-learning-path). **This draft's repository link must be verified after publication before posting the article.**
+The companion repository is available at [clembnl/ai-learning-path](https://github.com/clembnl/ai-learning-path).
 
 Install Python 3.11 or 3.12, then download the whole repository as a ZIP, or clone it:
 

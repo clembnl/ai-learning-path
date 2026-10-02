@@ -29,8 +29,6 @@ py -3.12 scripts/start.py
 
 The launcher creates `.venv`, installs `requirements.txt`, registers **Python (ai-learning-path)** inside that environment, and opens JupyterLab. Open `00_data.ipynb`, select that kernel, and choose **Run → Run All Cells**. Continue in numerical order. Use `--no-browser` to print the local URL without opening a browser. First installation needs Internet access and downloads PyTorch; subsequent sessions can use `python3 scripts/start.py --skip-install`.
 
-> The GitHub URL above is the planned public repository address. Until it is published, use the provided ZIP archive.
-
 ## What you will learn
 
 | Notebook | Focus | Main idea |
@@ -109,3 +107,7 @@ data/students.csv  committed synthetic dataset
 Edit notebook content in `notebooks/content/`, then regenerate with `python notebooks/build_notebooks.py`. Regeneration clears outputs. The committed CSV is used by all steps; `python -m common.data` recreates it with the default seed.
 
 Dependency ranges are in `requirements.txt`; `requirements-tested.txt` records the exact versions used for the local verification, if available. Ranges allow compatible updates; the snapshot is a reference for reproducing that run.
+
+## License
+
+Code and notebooks are available under the [MIT License](LICENSE).
