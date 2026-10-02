@@ -133,7 +133,7 @@ $$
 ## 17
 
 $$
-\hat{t}_i=\operatorname{sign}(\mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b)
+\hat{t}_i=\mathrm{sign}(\mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b)
 $$
 
 `assets/equations/equation-17.png`
@@ -157,7 +157,7 @@ $$
 ## 20
 
 $$
-\mathbf{h}_i=\operatorname{ReLU}(W_1\mathbf{x}_i+\mathbf{b}_1)
+\mathbf{h}_i=\mathrm{ReLU}(W_1\mathbf{x}_i+\mathbf{b}_1)
 $$
 
 `assets/equations/equation-20.png`
@@ -173,7 +173,7 @@ $$
 ## 22
 
 $$
-\operatorname{ReLU}(z)=\max(0,z)
+\mathrm{ReLU}(z)=\max(0,z)
 $$
 
 `assets/equations/equation-22.png`

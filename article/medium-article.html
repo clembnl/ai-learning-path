@@ -67,7 +67,7 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #ddd}a{color:#176a4d}
 <h2>3. The perceptron: a neuron with a hard decision</h2>
 <p>The perceptron makes the idea of an artificial neuron especially concrete: combine the inputs with weights, add a bias, and apply an activation.</p>
 <p>Instead of a sigmoid, it uses a hard threshold. Using labels tᵢ ∈ {−1, +1}, its decision is:</p>
-<p><img class="equation" style="width:210px" src="assets/equations/equation-17.png" alt="Equation 17: hat{t}_i=operatorname{sign}(mathbf{w}^{mathsf{T}}mathbf{x}_i+b)" /></p>
+<p><img class="equation" style="width:210px" src="assets/equations/equation-17.png" alt="Equation 17: hat{t}_i=mathrm{sign}(mathbf{w}^{mathsf{T}}mathbf{x}_i+b)" /></p>
 <p>We take the sign at zero to be +1. When an example is misclassified or lies exactly on the boundary, the implementation applies the perceptron update:</p>
 <p><img class="equation" style="width:349px" src="assets/equations/equation-18.png" alt="Equation 18: mathbf{w}leftarrowmathbf{w}+eta t_imathbf{x}_i, qquad bleftarrow b+eta t_i" /></p>
 <p>The update pushes the prediction in the direction of that example's correct label. Unlike logistic regression, this rule does not rely on differentiating the output activation: the hard threshold has zero derivative away from its discontinuity, so ordinary backpropagation through it would provide no useful signal.</p>
@@ -88,13 +88,13 @@ td,th{padding:10px;text-align:left;border-bottom:1px solid #ddd}a{color:#176a4d}
 <p>The practical notebook introduces mini-batches, which estimate a training gradient from subsets of examples. It reproduces the earlier fits, with logistic regression again reaching about <strong>89.3% accuracy</strong>. Automating differentiation makes the next step easier, while the model's representational limits remain visible.</p>
 <h2>6. A neural network: learn the features as well as the prediction</h2>
 <p>Our last model inserts a hidden layer between the inputs and the output:</p>
-<p><img class="equation" style="width:253px" src="assets/equations/equation-20.png" alt="Equation 20: mathbf{h}_i=operatorname{ReLU}(W_1mathbf{x}_i+mathbf{b}_1)" /></p>
+<p><img class="equation" style="width:253px" src="assets/equations/equation-20.png" alt="Equation 20: mathbf{h}_i=mathrm{ReLU}(W_1mathbf{x}_i+mathbf{b}_1)" /></p>
 <p><img class="equation" style="width:337px" src="assets/equations/equation-21.png" alt="Equation 21: a_i=mathbf{w}_2^{mathsf{T}}mathbf{h}_i+b_2, qquad p_i=sigma(a_i)" /></p>
 <p>There are two inputs, 16 hidden units and one output. The network has <strong>65 trainable parameters</strong>: 32 input-to-hidden weights, 16 hidden biases, 16 output weights and one output bias.</p>
 <p>The output still resembles logistic regression. What has changed is its input: it now receives 16 <strong>learned features</strong>, rather than the two features we originally supplied. Each hidden unit responds to a different weighted combination of study and sleep.</p>
 <h3>Why the activation is essential</h3>
 <p>ReLU acts on each component separately:</p>
-<p><img class="equation" style="width:233px" src="assets/equations/equation-22.png" alt="Equation 22: operatorname{ReLU}(z)=max(0,z)" /></p>
+<p><img class="equation" style="width:233px" src="assets/equations/equation-22.png" alt="Equation 22: mathrm{ReLU}(z)=max(0,z)" /></p>
 <p>It is continuous and piecewise linear, with derivative 1 for positive inputs and 0 for negative inputs. Its kink at zero does not prevent practical gradient-based training; automatic differentiation uses a defined convention there.</p>
 <p>Without a nonlinear activation, two affine layers would collapse into one:</p>
 <p><img class="equation" style="width:517px" src="assets/equations/equation-23.png" alt="Equation 23: W_2(W_1mathbf{x}+mathbf{b}_1)+mathbf{b}_2=(W_2W_1)mathbf{x}+(W_2mathbf{b}_1+mathbf{b}_2)" /></p>

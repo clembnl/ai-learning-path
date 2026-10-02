@@ -163,7 +163,7 @@ The perceptron makes the idea of an artificial neuron especially concrete: combi
 Instead of a sigmoid, it uses a hard threshold. Using labels $t_i\in\{-1,+1\}$, its decision is:
 
 $$
-\hat{t}_i=\operatorname{sign}(\mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b)
+\hat{t}_i=\mathrm{sign}(\mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b)
 $$
 
 We take the sign at zero to be +1. When an example is misclassified or lies exactly on the boundary, the implementation applies the perceptron update:
@@ -211,7 +211,7 @@ The practical notebook introduces mini-batches, which estimate a training gradie
 Our last model inserts a hidden layer between the inputs and the output:
 
 $$
-\mathbf{h}_i=\operatorname{ReLU}(W_1\mathbf{x}_i+\mathbf{b}_1)
+\mathbf{h}_i=\mathrm{ReLU}(W_1\mathbf{x}_i+\mathbf{b}_1)
 $$
 
 $$
@@ -227,7 +227,7 @@ The output still resembles logistic regression. What has changed is its input: i
 ReLU acts on each component separately:
 
 $$
-\operatorname{ReLU}(z)=\max(0,z)
+\mathrm{ReLU}(z)=\max(0,z)
 $$
 
 It is continuous and piecewise linear, with derivative 1 for positive inputs and 0 for negative inputs. Its kink at zero does not prevent practical gradient-based training; automatic differentiation uses a defined convention there.
