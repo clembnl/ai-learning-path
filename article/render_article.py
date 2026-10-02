@@ -20,6 +20,27 @@ ASSETS = ROOT / 'assets' / 'equations'
 ASSETS.mkdir(parents=True, exist_ok=True)
 plt.rcParams.update({'mathtext.fontset': 'stix', 'font.family': 'STIXGeneral'})
 text = SOURCE.read_text()
+# A small scientific figure explains the hinge in the activation.
+import numpy as np
+z = np.linspace(-4, 4, 401)
+fig, ax = plt.subplots(figsize=(7, 3.8))
+ax.axvspan(-4, 0, color='#eef0f3')
+ax.plot(z, np.maximum(0, z), color='#176a8a', linewidth=3)
+ax.axvline(0, color='#777777', linewidth=.8, linestyle='--')
+ax.scatter([-3, 2], [0, 2], color='#176a8a', s=38, zorder=3)
+ax.annotate('ReLU(−3) = 0', (-3, 0), xytext=(-3.8, .9),
+            arrowprops={'arrowstyle': '->', 'color': '#555555'}, fontsize=12)
+ax.annotate('ReLU(2) = 2', (2, 2), xytext=(.7, 3.1),
+            arrowprops={'arrowstyle': '->', 'color': '#555555'}, fontsize=12)
+ax.text(-3.7, -.65, 'Inactive: derivative 0', fontsize=12, color='#555555')
+ax.text(.5, -.65, 'Active: derivative 1', fontsize=12, color='#176a8a')
+ax.set(xlim=(-4, 4), ylim=(-.9, 4.4), xlabel='Weighted sum before activation, z',
+       ylabel='ReLU(z)', title='ReLU: a hinge at zero')
+ax.spines[['top', 'right']].set_visible(False)
+ax.grid(alpha=.18)
+fig.tight_layout()
+fig.savefig(ROOT / 'assets' / 'relu-explained.png', dpi=180, facecolor='white')
+plt.close(fig)
 widths = {}
 manifest = []
 

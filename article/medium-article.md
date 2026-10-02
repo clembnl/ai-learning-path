@@ -224,13 +224,23 @@ The output still resembles logistic regression. What has changed is its input: i
 
 ### Why the activation is essential
 
-ReLU acts on each component separately:
+**ReLU** stands for *Rectified Linear Unit*. Each hidden neuron first computes a weighted sum of the inputs plus a bias. ReLU then transforms that intermediate value, denoted by z, using a simple rule:
 
 $$
 \mathrm{ReLU}(z)=\max(0,z)
 $$
 
-It is continuous and piecewise linear, with derivative 1 for positive inputs and 0 for negative inputs. Its kink at zero does not prevent practical gradient-based training; automatic differentiation uses a defined convention there.
+Negative values become zero; positive values pass through unchanged. For example, ReLU maps −3 to 0 and 2 to 2. It acts separately on each hidden neuron's value—not directly on the original study or sleep hours.
+
+![ReLU: negative values are set to zero, positive values pass through](assets/relu-explained.png)
+
+*The bend at zero makes ReLU nonlinear, even though each side is a straight line.*
+
+Think of each hidden neuron as a **hinge**. Its weights and bias determine where its weighted sum crosses zero. On one side of that boundary, its output is zero; on the other, its output grows linearly. Training moves and rotates these boundaries. The output layer combines the 16 hinge-shaped responses, giving different regions of the input space different linear rules.
+
+This also explains how ReLU participates in learning. Its derivative is **1 for positive values** and **0 for negative values**. In backpropagation, an active neuron's ReLU passes the gradient through unchanged, while an inactive neuron's ReLU blocks that path for the current example. Other examples may activate the same neuron and update its weights. The derivative is undefined exactly at zero; PyTorch uses zero there.
+
+The factor of 1 on the positive side avoids the shrinkage introduced by a saturated sigmoid activation, although the rest of the network still affects the full gradient. A unit that remains inactive for every training example can stop learning through this path—the *dying ReLU* problem.
 
 Without a nonlinear activation, two affine layers would collapse into one:
 
@@ -238,7 +248,7 @@ $$
 W_2(W_1\mathbf{x}+\mathbf{b}_1)+\mathbf{b}_2=(W_2W_1)\mathbf{x}+(W_2\mathbf{b}_1+\mathbf{b}_2)
 $$
 
-Extra layers alone would therefore leave a straight classification boundary. ReLU makes the hidden representation piecewise linear, allowing the boundary to bend as different hidden units become active.
+Extra layers alone would therefore leave a straight classification boundary. With ReLU, the network can join linear regions into a bent boundary and approximate the sleep effect. It learns this shape from examples rather than being given a squared-sleep feature.
 
 We retain binary cross-entropy and differentiate it through both layers. This step also switches to Adam, an optimiser that uses running gradient statistics to adapt updates, and introduces early stopping: validation loss selects the checkpoint to retain. A lower training loss alone is not a reason to keep training indefinitely.
 
