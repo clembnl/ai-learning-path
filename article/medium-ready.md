@@ -12,27 +12,27 @@ The companion project contains seven Jupyter notebooks: one introduces the data,
 
 ## First, create a problem we can understand
 
-Imagine a dataset of 1,000 students. For each student, we observe study hours, denoted by $s_i$, and sleep hours, denoted by $h_i$. We generate an exam score from:
+Imagine a dataset of 1,000 students. For each student, we observe study hours, denoted by sᵢ, and sleep hours, denoted by hᵢ. We generate an exam score from:
 
-$$
-u_i = 35 + 5s_i - 2(h_i - 7.5)^2 + \varepsilon_i
-$$
 
-$$
-\varepsilon_i \sim \mathcal{N}(0,4^2), \qquad r_i = \min(100,\max(0,u_i))
-$$
+![Equation 1: u_i = 35 + 5s_i - 2(h_i - 7.5)^2 + varepsilon_i](assets/equations/equation-01.png)
 
-Here, $r_i$ is the final score, clipped to the range 0–100. The noise term introduces variation that the two observed features cannot predict.
+
+
+![Equation 2: varepsilon_i sim mathcal{N}(0,4^2), qquad r_i = min(100,max(0,u_i))](assets/equations/equation-02.png)
+
+
+Here, rᵢ is the final score, clipped to the range 0–100. The noise term introduces variation that the two observed features cannot predict.
 
 The formula contains a deliberate contrast. Study hours have a linear effect, while sleep has a quadratic effect with a peak at 7.5 hours. These are rules of our synthetic world, not empirical claims about students or sleep.
 
 We also create a binary label:
 
-$$
-y_i = \mathbf{1}[r_i \geq 50]
-$$
 
-The indicator is 1 when the student passes and 0 otherwise. We now have two related tasks: **regression** predicts the score $r_i$; **classification** predicts the label $y_i$.
+![Equation 3: y_i = mathbf{1}(r_i geq 50)](assets/equations/equation-03.png)
+
+
+The indicator is 1 when the student passes and 0 otherwise. We now have two related tasks: **regression** predicts the score rᵢ; **classification** predicts the label yᵢ.
 
 Because we created the data, we know the relationship the models are trying to approximate. The curved sleep effect will help us distinguish errors caused by imperfect training from errors caused by a model that is too restrictive.
 
@@ -44,11 +44,11 @@ We use 700 examples for training, 150 for validation and 150 for testing. Traini
 
 Before training, each feature is standardised:
 
-$$
-x_{ij} = \frac{v_{ij}-\mu_j}{\sigma_j}
-$$
 
-Here, $v_{ij}$ is student $i$'s original value for feature $j$, and $\mu_j$ and $\sigma_j$ are computed on the **training set only**. We apply those same statistics to validation and test data. From this point on, $\mathbf{x}_i$ denotes the two standardised inputs.
+![Equation 4: x_{ij} = frac{v_{ij}-mu_j}{sigma_j}](assets/equations/equation-04.png)
+
+
+Here, vᵢⱼ is student i's original value for feature j, and μⱼ and σⱼ are computed on the **training set only**. We apply those same statistics to validation and test data. From this point on, xᵢ denotes the two standardised inputs.
 
 ## 1. Linear regression: prediction, loss and learning
 
@@ -56,35 +56,35 @@ Here, $v_{ij}$ is student $i$'s original value for feature $j$, and $\mu_j$ and 
 
 Our first model predicts a score from a weighted sum:
 
-$$
-\hat{r}_i = w_1x_{i1}+w_2x_{i2}+b = \mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b
-$$
 
-The weights determine how strongly each input affects the prediction. The bias $b$ sets its baseline. Collectively, these are the model's parameters: $\theta=(\mathbf{w},b)$.
+![Equation 5: hat{r}_i = w_1x_{i1}+w_2x_{i2}+b = mathbf{w}^{mathsf{T}}mathbf{x}_i+b](assets/equations/equation-05.png)
 
-For all $n$ training examples at once, the same expression becomes:
 
-$$
-\hat{\mathbf{r}} = X\mathbf{w}+b\mathbf{1}
-$$
+The weights determine how strongly each input affects the prediction. The bias b sets its baseline. Collectively, these are the model's parameters: θ = (w, b).
 
-Each row of $X$ contains one student's features. This matrix expression is the mathematical counterpart of the short NumPy prediction in the first notebook.
+For all n training examples at once, the same expression becomes:
+
+
+![Equation 6: hat{mathbf{r}} = Xmathbf{w}+bmathbf{1}](assets/equations/equation-06.png)
+
+
+Each row of X contains one student's features. This matrix expression is the mathematical counterpart of the short NumPy prediction in the first notebook.
 
 ### A loss turns errors into an objective
 
 We need a way to judge the parameters. The **mean squared error**, or MSE, averages the squared differences between predictions and observed scores:
 
-$$
-\mathcal{L}_{\mathrm{MSE}}(\mathbf{w},b)=\frac{1}{n}\sum_{i=1}^{n}(\hat{r}_i-r_i)^2
-$$
+
+![Equation 7: mathcal{L}_{mathrm{MSE}}(mathbf{w},b)=frac{1}{n}sum_{i=1}^{n}(hat{r}_i-r_i)^2](assets/equations/equation-07.png)
+
 
 Squaring prevents positive and negative errors from cancelling and penalises large errors more strongly. A prediction that misses by 10 points contributes four times as much loss as one that misses by 5 points.
 
 Training means searching for parameters that minimise this loss on the training set:
 
-$$
-\theta^* = \underset{\theta}{\mathrm{arg\,min}}\;\mathcal{L}(\theta)
-$$
+
+![Equation 8: theta^* = underset{theta}{mathrm{arg,min}};mathcal{L}(theta)](assets/equations/equation-08.png)
+
 
 The loss is an optimisation objective. Generalisation is a separate question, which is why we evaluate the fitted model on held-out data.
 
@@ -92,21 +92,21 @@ The loss is an optimisation objective. Generalisation is a separate question, wh
 
 The gradient describes how the loss changes as each parameter changes. Gradient descent moves in the opposite direction:
 
-$$
-\theta_{t+1}=\theta_t-\eta\nabla_{\theta}\mathcal{L}(\theta_t)
-$$
 
-The learning rate $\eta>0$ controls the size of each update. A sufficiently small step follows a local decrease in the loss; an overly large step can overshoot and make training diverge.
+![Equation 9: theta_{t+1}=theta_t-etanabla_{theta}mathcal{L}(theta_t)](assets/equations/equation-09.png)
+
+
+The learning rate η > 0 controls the size of each update. A sufficiently small step follows a local decrease in the loss; an overly large step can overshoot and make training diverge.
 
 For our MSE objective, the derivatives are:
 
-$$
-\nabla_{\mathbf{w}}\mathcal{L}_{\mathrm{MSE}}=\frac{2}{n}X^{\mathsf{T}}(\hat{\mathbf{r}}-\mathbf{r})
-$$
 
-$$
-\frac{\partial\mathcal{L}_{\mathrm{MSE}}}{\partial b}=\frac{2}{n}\sum_{i=1}^{n}(\hat{r}_i-r_i)
-$$
+![Equation 10: nabla_{mathbf{w}}mathcal{L}_{mathrm{MSE}}=frac{2}{n}X^{mathsf{T}}(hat{mathbf{r}}-mathbf{r})](assets/equations/equation-10.png)
+
+
+
+![Equation 11: frac{partialmathcal{L}_{mathrm{MSE}}}{partial b}=frac{2}{n}sum_{i=1}^{n}(hat{r}_i-r_i)](assets/equations/equation-11.png)
+
 
 These formulas connect prediction errors to parameter updates. A weight's gradient combines the residual errors with the corresponding input feature; the bias gradient depends on the average residual. Repeated updates gradually improve the fit.
 
@@ -120,29 +120,29 @@ Yet the model still has a structural limitation. A weighted sum of the original 
 
 Now we predict whether the student passes. We keep the weighted sum, call it a **logit**, and pass it through the sigmoid function:
 
-$$
-a_i=\mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b, \qquad p_i=\sigma(a_i)=\frac{1}{1+e^{-a_i}}
-$$
 
-The output $p_i$ lies between 0 and 1 and represents the model's estimated probability of passing. For a class prediction, we threshold that probability:
+![Equation 12: a_i=mathbf{w}^{mathsf{T}}mathbf{x}_i+b, qquad p_i=sigma(a_i)=frac{1}{1+e^{-a_i}}](assets/equations/equation-12.png)
 
-$$
-\hat{y}_i=\mathbf{1}[p_i\geq 0.5]
-$$
+
+The output pᵢ lies between 0 and 1 and represents the model's estimated probability of passing. For a class prediction, we threshold that probability:
+
+
+![Equation 13: hat{y}_i=mathbf{1}(p_igeq 0.5)](assets/equations/equation-13.png)
+
 
 We also change the loss. **Binary cross-entropy** measures how well the probabilities agree with the observed labels:
 
-$$
-\mathcal{L}_{\mathrm{BCE}}=-\frac{1}{n}\sum_{i=1}^{n}\left[y_i\log p_i+(1-y_i)\log(1-p_i)\right]
-$$
 
-For a student who passes, the contribution is $-\log p_i$; for one who fails, it is $-\log(1-p_i)$. Assigning very low probability to the outcome that actually occurs produces a large penalty. This loss is also the negative average log-likelihood of the observed binary labels under the model.
+![Equation 14: mathcal{L}_{mathrm{BCE}}=-frac{1}{n}sum_{i=1}^{n}left(y_ilog p_i+(1-y_i)log(1-p_i)right)](assets/equations/equation-14.png)
+
+
+For a student who passes, the contribution is −log pᵢ; for one who fails, it is −log(1 − pᵢ). Assigning very low probability to the outcome that actually occurs produces a large penalty. This loss is also the negative average log-likelihood of the observed binary labels under the model.
 
 Combining the sigmoid with cross-entropy gives a particularly simple gradient:
 
-$$
-\nabla_{\mathbf{w}}\mathcal{L}_{\mathrm{BCE}}=\frac{1}{n}X^{\mathsf{T}}(\mathbf{p}-\mathbf{y}), \qquad \frac{\partial\mathcal{L}_{\mathrm{BCE}}}{\partial b}=\frac{1}{n}\sum_{i=1}^{n}(p_i-y_i)
-$$
+
+![Equation 15: nabla_{mathbf{w}}mathcal{L}_{mathrm{BCE}}=frac{1}{n}X^{mathsf{T}}(mathbf{p}-mathbf{y}), qquad frac{partialmathcal{L}_{mathrm{BCE}}}{partial b}=frac{1}{n}sum_{i=1}^{n}(p_i-y_i)](assets/equations/equation-15.png)
+
 
 Compare this with the MSE gradient: we again multiply a vector of prediction errors by the input matrix. The output and loss have changed, but the pattern of learning is familiar.
 
@@ -150,9 +150,9 @@ The NumPy implementation reaches **89.3% test accuracy**, correctly classifying 
 
 Why does it still struggle with the curve? At the classification boundary:
 
-$$
-p_i=0.5 \quad\Longleftrightarrow\quad \mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b=0
-$$
+
+![Equation 16: p_i=0.5 quadLongleftrightarrowquad mathbf{w}^{mathsf{T}}mathbf{x}_i+b=0](assets/equations/equation-16.png)
+
 
 That is the equation of a straight line in our two-dimensional input space. The sigmoid is nonlinear, but its 0.5 threshold corresponds to a linear boundary. The notebook plots that boundary and explores how changing the probability threshold changes the errors.
 
@@ -160,17 +160,17 @@ That is the equation of a straight line in our two-dimensional input space. The 
 
 The perceptron makes the idea of an artificial neuron especially concrete: combine the inputs with weights, add a bias, and apply an activation.
 
-Instead of a sigmoid, it uses a hard threshold. Using labels $t_i\in\{-1,+1\}$, its decision is:
+Instead of a sigmoid, it uses a hard threshold. Using labels tᵢ ∈ {−1, +1}, its decision is:
 
-$$
-\hat{t}_i=\operatorname{sign}(\mathbf{w}^{\mathsf{T}}\mathbf{x}_i+b)
-$$
+
+![Equation 17: hat{t}_i=operatorname{sign}(mathbf{w}^{mathsf{T}}mathbf{x}_i+b)](assets/equations/equation-17.png)
+
 
 We take the sign at zero to be +1. When an example is misclassified or lies exactly on the boundary, the implementation applies the perceptron update:
 
-$$
-\mathbf{w}\leftarrow\mathbf{w}+\eta t_i\mathbf{x}_i, \qquad b\leftarrow b+\eta t_i
-$$
+
+![Equation 18: mathbf{w}leftarrowmathbf{w}+eta t_imathbf{x}_i, qquad bleftarrow b+eta t_i](assets/equations/equation-18.png)
+
 
 The update pushes the prediction in the direction of that example's correct label. Unlike logistic regression, this rule does not rely on differentiating the output activation: the hard threshold has zero derivative away from its discontinuity, so ordinary backpropagation through it would provide no useful signal.
 
@@ -194,11 +194,11 @@ The library now has an interpretable role: it supplies reliable implementations 
 
 With two weights and a bias, deriving gradients by hand is manageable. As models become compositions of many operations, we need a systematic way to differentiate them.
 
-That way is the **chain rule**. For a parameter $\theta$ that affects a prediction through an intermediate quantity $a$:
+That way is the **chain rule**. For a parameter θ that affects a prediction through an intermediate quantity a:
 
-$$
-\frac{\partial\mathcal{L}}{\partial\theta}=\frac{\partial\mathcal{L}}{\partial a}\frac{\partial a}{\partial\theta}
-$$
+
+![Equation 19: frac{partialmathcal{L}}{partialtheta}=frac{partialmathcal{L}}{partial a}frac{partial a}{partialtheta}](assets/equations/equation-19.png)
+
 
 For a larger computation, we apply this rule along its dependencies and sum contributions where paths meet. PyTorch records the operations used to compute the loss and automatically works backwards to obtain parameter gradients. Backpropagation is this reverse calculation through the model; the optimiser then uses those gradients to update its parameters.
 
@@ -210,13 +210,13 @@ The practical notebook introduces mini-batches, which estimate a training gradie
 
 Our last model inserts a hidden layer between the inputs and the output:
 
-$$
-\mathbf{h}_i=\operatorname{ReLU}(W_1\mathbf{x}_i+\mathbf{b}_1)
-$$
 
-$$
-a_i=\mathbf{w}_2^{\mathsf{T}}\mathbf{h}_i+b_2, \qquad p_i=\sigma(a_i)
-$$
+![Equation 20: mathbf{h}_i=operatorname{ReLU}(W_1mathbf{x}_i+mathbf{b}_1)](assets/equations/equation-20.png)
+
+
+
+![Equation 21: a_i=mathbf{w}_2^{mathsf{T}}mathbf{h}_i+b_2, qquad p_i=sigma(a_i)](assets/equations/equation-21.png)
+
 
 There are two inputs, 16 hidden units and one output. The network has **65 trainable parameters**: 32 input-to-hidden weights, 16 hidden biases, 16 output weights and one output bias.
 
@@ -226,17 +226,17 @@ The output still resembles logistic regression. What has changed is its input: i
 
 ReLU acts on each component separately:
 
-$$
-\operatorname{ReLU}(z)=\max(0,z)
-$$
+
+![Equation 22: operatorname{ReLU}(z)=max(0,z)](assets/equations/equation-22.png)
+
 
 It is continuous and piecewise linear, with derivative 1 for positive inputs and 0 for negative inputs. Its kink at zero does not prevent practical gradient-based training; automatic differentiation uses a defined convention there.
 
 Without a nonlinear activation, two affine layers would collapse into one:
 
-$$
-W_2(W_1\mathbf{x}+\mathbf{b}_1)+\mathbf{b}_2=(W_2W_1)\mathbf{x}+(W_2\mathbf{b}_1+\mathbf{b}_2)
-$$
+
+![Equation 23: W_2(W_1mathbf{x}+mathbf{b}_1)+mathbf{b}_2=(W_2W_1)mathbf{x}+(W_2mathbf{b}_1+mathbf{b}_2)](assets/equations/equation-23.png)
+
 
 Extra layers alone would therefore leave a straight classification boundary. ReLU makes the hidden representation piecewise linear, allowing the boundary to bend as different hidden units become active.
 
@@ -252,9 +252,9 @@ The network correctly classifies **143 of 150 test examples: 95.3% accuracy**, c
 
 We know that the generating rule contains a squared sleep term. Suppose we give logistic regression that feature explicitly:
 
-$$
-\phi(\mathbf{x})=(x_1,x_2,x_2^2)^{\mathsf{T}}, \qquad p=\sigma(\mathbf{w}^{\mathsf{T}}\phi(\mathbf{x})+b)
-$$
+
+![Equation 24: phi(mathbf{x})=(x_1,x_2,x_2^2)^{mathsf{T}}, qquad p=sigma(mathbf{w}^{mathsf{T}}phi(mathbf{x})+b)](assets/equations/equation-24.png)
+
 
 This model remains linear in its parameters, but its boundary can be nonlinear in the original inputs. Squaring standardised sleep is sufficient here: together with the linear sleep term and the intercept, it can represent a general quadratic in the original sleep variable.
 
