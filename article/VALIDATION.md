@@ -16,4 +16,8 @@ Environment: macOS Apple Silicon, Python 3.12.14, NumPy 2.5.3, scikit-learn 1.9.
 
 Figures in `article/assets/` were extracted from the executed notebooks, not from pre-existing exported plots.
 
-The full dependency snapshot is `requirements-tested.txt`. The local install initially used the supplied requirements; all installed direct dependencies also satisfy the updated bounded ranges. Automatic GUI browser opening and Windows/Linux runs were not verified locally. The Linux CI workflow is prepared but has not run on GitHub yet. Remote publication is not part of these local results.
+The full dependency snapshot is `requirements-tested.txt`. The local install initially used the supplied requirements; all installed direct dependencies also satisfy the updated bounded ranges. Automatic GUI browser opening and Windows execution were not verified locally.
+
+## GitHub verification
+
+The public repository is published at https://github.com/clembnl/ai-learning-path under the MIT License. The [first GitHub Actions run](https://github.com/clembnl/ai-learning-path/actions/runs/36980655644) completed successfully on Linux/Python 3.12: dependency installation, the model tests and execution of all seven notebooks passed. Code commit: `3ef664f`.

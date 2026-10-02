@@ -81,7 +81,7 @@ After setup, use the environment's Python (`.venv/bin/python` on macOS/Linux, `.
 .venv/bin/python -m steps.step06_neural_network
 ```
 
-The notebook verifier runs all seven notebooks with fresh kernels and saves executed copies under `outputs/executed/`. Scripts also save figures under `outputs/`. GitHub Actions runs the tests and notebooks on Linux/Python 3.12; its results will be available after publication.
+The notebook verifier runs all seven notebooks with fresh kernels and saves executed copies under `outputs/executed/`. Scripts also save figures under `outputs/`. GitHub Actions runs the tests and notebooks on Linux/Python 3.12. The [first verification run](https://github.com/clembnl/ai-learning-path/actions/runs/36980655644) passed.
 
 ## Troubleshooting
 
@@ -99,9 +99,9 @@ steps/              six runnable model implementations
 notebooks/          seven guided notebooks
 notebooks/content/  notebook source cells
 scripts/            setup/launch and notebook verification
-tests/             model and data smoke tests
-data/students.csv  committed synthetic dataset
- article/           English Medium draft, figures and publishing notes
+tests/              model and data smoke tests
+data/students.csv   committed synthetic dataset
+article/           English Medium draft, figures and publishing notes
 ```
 
 Edit notebook content in `notebooks/content/`, then regenerate with `python notebooks/build_notebooks.py`. Regeneration clears outputs. The committed CSV is used by all steps; `python -m common.data` recreates it with the default seed.
